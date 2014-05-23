@@ -31,7 +31,9 @@
             this.lblData = new System.Windows.Forms.Label();
             this.numData = new System.Windows.Forms.NumericUpDown();
             this.btnSend = new System.Windows.Forms.Button();
+            this.pbSprite = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.numData)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbSprite)).BeginInit();
             this.SuspendLayout();
             // 
             // lblData
@@ -59,18 +61,33 @@
             this.btnSend.UseVisualStyleBackColor = true;
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
+            // pbSprite
+            // 
+            this.pbSprite.Location = new System.Drawing.Point(12, 98);
+            this.pbSprite.Name = "pbSprite";
+            this.pbSprite.Size = new System.Drawing.Size(100, 100);
+            this.pbSprite.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pbSprite.TabIndex = 5;
+            this.pbSprite.TabStop = false;
+            this.pbSprite.DragDrop += new System.Windows.Forms.DragEventHandler(this.pbSprite_DragDrop);
+            this.pbSprite.DragEnter += new System.Windows.Forms.DragEventHandler(this.pbSprite_DragEnter);
+            this.pbSprite.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbSprite_MouseDown);
+            // 
             // frmMemMapTestA
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.pbSprite);
             this.Controls.Add(this.btnSend);
             this.Controls.Add(this.numData);
             this.Controls.Add(this.lblData);
             this.Name = "frmMemMapTestA";
             this.Text = "frmMemMapTestA";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMemMapTestA_FormClosing);
             this.Load += new System.EventHandler(this.frmMemMapTestB_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numData)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbSprite)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -80,6 +97,7 @@
         private System.Windows.Forms.Label lblData;
         private System.Windows.Forms.NumericUpDown numData;
         private System.Windows.Forms.Button btnSend;
+        private System.Windows.Forms.PictureBox pbSprite;
     }
 }
 

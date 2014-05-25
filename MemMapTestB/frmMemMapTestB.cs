@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO.MemoryMappedFiles;
-using System.IO;
 using System.Runtime.InteropServices;
 using PKMDS_CS;
 namespace MemMapTestB
@@ -15,7 +8,6 @@ namespace MemMapTestB
     public partial class frmMemMapTestB : Form
     {
         PKMDS.Pokemon frmpkm = new PKMDS.Pokemon();
-        //http://blogs.msdn.com/b/salvapatuel/archive/2009/06/08/working-with-memory-mapped-files-in-net-4.aspx
         public frmMemMapTestB()
         {
             try
@@ -43,7 +35,9 @@ namespace MemMapTestB
         {
             ((Control)(pbSprite)).AllowDrop = true;
             frmpkm = PKMDS.ReadPokemonFile("C:\\Users\\codem_000\\Desktop\\2760882E_Dragonite.pkm");
-            lblData.Text = frmpkm.SpeciesID.ToString();
+            Random rnd = new Random(DateTime.Now.Millisecond);
+            frmpkm.SpeciesID = (UInt16)(rnd.Next(1, 649));
+            lblData.Text = frmpkm.SpeciesName;
             pbSprite.Image = frmpkm.Sprite;
         }
         private void pbSprite_DragEnter(object sender, DragEventArgs e)
@@ -53,28 +47,12 @@ namespace MemMapTestB
                 e.Effect = DragDropEffects.Move;
             }
         }
-        private void btnReceive_Click(object sender, EventArgs e)
-        {
-            MemoryMappedFile MemoryMapped = MemoryMappedFile.CreateOrOpen("name", 1000, MemoryMappedFileAccess.ReadWrite);
-            using (MemoryMappedViewAccessor FileMap = MemoryMapped.CreateViewAccessor())
-            {
-                PKMDS.Pokemon pkm = new PKMDS.Pokemon();
-                for (int i = 0; i < Marshal.SizeOf(pkm); i++)
-                {
-                    FileMap.Read<byte>(i, out pkm.Data[i]);
-                }
-                lblData.Text = pkm.SpeciesID.ToString();
-                pbSprite.Image = pkm.Sprite;
-            }
-        }
         private void pbSprite_MouseDown(object sender, MouseEventArgs e)
         {
             PictureBox pb = (PictureBox)(sender);
             DataObject data = new DataObject();
             data = new DataObject(DataFormats.Serializable, frmpkm);
             pb.DoDragDrop(data, DragDropEffects.Move);
-            //MessageBox.Show("Done!");
-
             MemoryMappedFile MemoryMapped = MemoryMappedFile.CreateOrOpen("name", 1000, MemoryMappedFileAccess.ReadWrite);
             using (MemoryMappedViewAccessor FileMap = MemoryMapped.CreateViewAccessor())
             {
@@ -84,7 +62,7 @@ namespace MemMapTestB
                     FileMap.Read<byte>(i, out otherpkm.Data[i]);
                 }
                 frmpkm.Data = otherpkm.Data;
-                lblData.Text = frmpkm.SpeciesID.ToString();
+                lblData.Text = frmpkm.SpeciesName;
                 pbSprite.Image = frmpkm.Sprite;
             }
         }
@@ -103,7 +81,7 @@ namespace MemMapTestB
                     }
                 }
                 frmpkm.Data = otherpkm.Data;
-                lblData.Text = frmpkm.SpeciesID.ToString();
+                lblData.Text = frmpkm.SpeciesName;
                 pbSprite.Image = frmpkm.Sprite;
             }
         }

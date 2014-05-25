@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.lblData = new System.Windows.Forms.Label();
-            this.numData = new System.Windows.Forms.NumericUpDown();
-            this.btnSend = new System.Windows.Forms.Button();
             this.pbSprite = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.numData)).BeginInit();
+            this.pbSprite2 = new System.Windows.Forms.PictureBox();
+            this.lblData2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbSprite)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbSprite2)).BeginInit();
             this.SuspendLayout();
             // 
             // lblData
@@ -43,23 +43,6 @@
             this.lblData.Name = "lblData";
             this.lblData.Size = new System.Drawing.Size(109, 57);
             this.lblData.TabIndex = 2;
-            // 
-            // numData
-            // 
-            this.numData.Location = new System.Drawing.Point(93, 15);
-            this.numData.Name = "numData";
-            this.numData.Size = new System.Drawing.Size(120, 20);
-            this.numData.TabIndex = 3;
-            // 
-            // btnSend
-            // 
-            this.btnSend.Location = new System.Drawing.Point(12, 12);
-            this.btnSend.Name = "btnSend";
-            this.btnSend.Size = new System.Drawing.Size(75, 23);
-            this.btnSend.TabIndex = 4;
-            this.btnSend.Text = "Send";
-            this.btnSend.UseVisualStyleBackColor = true;
-            this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
             // pbSprite
             // 
@@ -73,21 +56,41 @@
             this.pbSprite.DragEnter += new System.Windows.Forms.DragEventHandler(this.pbSprite_DragEnter);
             this.pbSprite.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbSprite_MouseDown);
             // 
+            // pbSprite2
+            // 
+            this.pbSprite2.Location = new System.Drawing.Point(127, 98);
+            this.pbSprite2.Name = "pbSprite2";
+            this.pbSprite2.Size = new System.Drawing.Size(100, 100);
+            this.pbSprite2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.pbSprite2.TabIndex = 6;
+            this.pbSprite2.TabStop = false;
+            this.pbSprite2.DragDrop += new System.Windows.Forms.DragEventHandler(this.pbSprite_DragDrop);
+            this.pbSprite2.DragEnter += new System.Windows.Forms.DragEventHandler(this.pbSprite_DragEnter);
+            this.pbSprite2.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pbSprite_MouseDown);
+            // 
+            // lblData2
+            // 
+            this.lblData2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lblData2.Location = new System.Drawing.Point(127, 38);
+            this.lblData2.Name = "lblData2";
+            this.lblData2.Size = new System.Drawing.Size(109, 57);
+            this.lblData2.TabIndex = 7;
+            // 
             // frmMemMapTestA
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 262);
+            this.Controls.Add(this.lblData2);
+            this.Controls.Add(this.pbSprite2);
             this.Controls.Add(this.pbSprite);
-            this.Controls.Add(this.btnSend);
-            this.Controls.Add(this.numData);
             this.Controls.Add(this.lblData);
             this.Name = "frmMemMapTestA";
             this.Text = "frmMemMapTestA";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.frmMemMapTestA_FormClosing);
             this.Load += new System.EventHandler(this.frmMemMapTestB_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.numData)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbSprite)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pbSprite2)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -95,9 +98,9 @@
         #endregion
 
         private System.Windows.Forms.Label lblData;
-        private System.Windows.Forms.NumericUpDown numData;
-        private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.PictureBox pbSprite;
+        private System.Windows.Forms.PictureBox pbSprite2;
+        private System.Windows.Forms.Label lblData2;
     }
 }
 

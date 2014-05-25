@@ -1,13 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO.MemoryMappedFiles;
-using System.IO;
 using System.Runtime.InteropServices;
 using PKMDS_CS;
 namespace MemMapTestA
@@ -15,7 +8,7 @@ namespace MemMapTestA
     public partial class frmMemMapTestA : Form
     {
         PKMDS.Pokemon frmpkm = new PKMDS.Pokemon();
-        //http://blogs.msdn.com/b/salvapatuel/archive/2009/06/08/working-with-memory-mapped-files-in-net-4.aspx
+        PKMDS.Pokemon frmpkm2 = new PKMDS.Pokemon();
         public frmMemMapTestA()
         {
             try
@@ -41,12 +34,18 @@ namespace MemMapTestA
         }
         private void frmMemMapTestB_Load(object sender, EventArgs e)
         {
-            numData.Enabled = false;
-            numData.Visible = false;
             ((Control)(pbSprite)).AllowDrop = true;
+            ((Control)(pbSprite2)).AllowDrop = true;
             frmpkm = PKMDS.ReadPokemonFile("C:\\Users\\codem_000\\Desktop\\5CE4720E_Feraligatr.pkm");
-            lblData.Text = frmpkm.SpeciesID.ToString();
+            frmpkm2 = PKMDS.ReadPokemonFile("C:\\Users\\codem_000\\Desktop\\42FCBC7E_Suicune.pkm");
+            Random rnd = new Random(DateTime.Now.Millisecond);
+            frmpkm.SpeciesID = (UInt16)(rnd.Next(1, 649));
+            frmpkm2.SpeciesID = (UInt16)(rnd.Next(1, 649));
+            frmpkm2.SID = 0;
+            lblData.Text = frmpkm.SpeciesName;
+            lblData2.Text = frmpkm2.SpeciesName;
             pbSprite.Image = frmpkm.Sprite;
+            pbSprite2.Image = frmpkm2.Sprite;
         }
         private void pbSprite_DragEnter(object sender, DragEventArgs e)
         {
@@ -55,28 +54,19 @@ namespace MemMapTestA
                 e.Effect = DragDropEffects.Move;
             }
         }
-        private void btnSend_Click(object sender, EventArgs e)
-        {
-            MemoryMappedFile MemoryMapped = MemoryMappedFile.CreateOrOpen("name", 1000, MemoryMappedFileAccess.ReadWrite);
-            using (MemoryMappedViewAccessor FileMap = MemoryMapped.CreateViewAccessor())
-            {
-                PKMDS.Pokemon pkm = PKMDS.ReadPokemonFile("C:\\Users\\codem_000\\Desktop\\5CE4720E_Feraligatr.pkm");
-                lblData.Text = pkm.SpeciesID.ToString();
-                pbSprite.Image = pkm.Sprite;
-                for (int i = 0; i < Marshal.SizeOf(pkm); i++)
-                {
-                    FileMap.Write<byte>(i, ref pkm.Data[i]);
-                }
-            }
-        }
         private void pbSprite_MouseDown(object sender, MouseEventArgs e)
         {
             PictureBox pb = (PictureBox)(sender);
             DataObject data = new DataObject();
-            data = new DataObject(DataFormats.Serializable, frmpkm);
+            if (pb.Name == pbSprite.Name)
+            {
+                data = new DataObject(DataFormats.Serializable, frmpkm);
+            }
+            else
+            {
+                data = new DataObject(DataFormats.Serializable, frmpkm2);
+            }
             pb.DoDragDrop(data, DragDropEffects.Move);
-            //MessageBox.Show("Done!");
-
             MemoryMappedFile MemoryMapped = MemoryMappedFile.CreateOrOpen("name", 1000, MemoryMappedFileAccess.ReadWrite);
             using (MemoryMappedViewAccessor FileMap = MemoryMapped.CreateViewAccessor())
             {
@@ -85,9 +75,18 @@ namespace MemMapTestA
                 {
                     FileMap.Read<byte>(i, out otherpkm.Data[i]);
                 }
-                frmpkm.Data = otherpkm.Data;
-                lblData.Text = frmpkm.SpeciesID.ToString();
+                if (pb.Name == pbSprite.Name)
+                {
+                    frmpkm.Data = otherpkm.Data;
+                }
+                else
+                {
+                    frmpkm2.Data = otherpkm.Data;
+                }
+                lblData.Text = frmpkm.SpeciesName;
+                lblData2.Text = frmpkm2.SpeciesName;
                 pbSprite.Image = frmpkm.Sprite;
+                pbSprite2.Image = frmpkm2.Sprite;
             }
         }
         private void pbSprite_DragDrop(object sender, DragEventArgs e)
@@ -101,12 +100,28 @@ namespace MemMapTestA
                 {
                     for (int i = 0; i < Marshal.SizeOf(frmpkm); i++)
                     {
-                        FileMap.Write<byte>(i, ref frmpkm.Data[i]);
+                        if (pb.Name == pbSprite.Name)
+                        {
+                            FileMap.Write<byte>(i, ref frmpkm.Data[i]);
+                        }
+                        else
+                        {
+                            FileMap.Write<byte>(i, ref frmpkm2.Data[i]);
+                        }
                     }
                 }
-                frmpkm.Data = otherpkm.Data;
-                lblData.Text = frmpkm.SpeciesID.ToString();
+                if (pb.Name == pbSprite.Name)
+                {
+                    frmpkm.Data = otherpkm.Data;
+                }
+                else
+                {
+                    frmpkm2.Data = otherpkm.Data;
+                }
+                lblData.Text = frmpkm.SpeciesName;
+                lblData2.Text = frmpkm2.SpeciesName;
                 pbSprite.Image = frmpkm.Sprite;
+                pbSprite2.Image = frmpkm2.Sprite;
             }
         }
     }

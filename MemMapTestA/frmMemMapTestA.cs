@@ -36,12 +36,13 @@ namespace MemMapTestA
         {
             ((Control)(pbSprite)).AllowDrop = true;
             ((Control)(pbSprite2)).AllowDrop = true;
-            frmpkm = PKMDS.ReadPokemonFile("C:\\Users\\codem_000\\Desktop\\5CE4720E_Feraligatr.pkm");
-            frmpkm2 = PKMDS.ReadPokemonFile("C:\\Users\\codem_000\\Desktop\\42FCBC7E_Suicune.pkm");
+            frmpkm = PKMDS.ReadPokemonFile("Feraligatr.pkm");
+            frmpkm2 = PKMDS.ReadPokemonFile("Genesect.pkm");
             Random rnd = new Random(DateTime.Now.Millisecond);
             frmpkm.SpeciesID = (UInt16)(rnd.Next(1, 649));
             frmpkm2.SpeciesID = (UInt16)(rnd.Next(1, 649));
-            frmpkm2.SID = 0;
+            frmpkm.SID = 0x1234;
+            frmpkm2.SID = 0x1234;
             lblData.Text = frmpkm.SpeciesName;
             lblData2.Text = frmpkm2.SpeciesName;
             pbSprite.Image = frmpkm.Sprite;
@@ -67,20 +68,36 @@ namespace MemMapTestA
                 data = new DataObject(DataFormats.Serializable, frmpkm2);
             }
             pb.DoDragDrop(data, DragDropEffects.Move);
-            MemoryMappedFile MemoryMapped = MemoryMappedFile.CreateOrOpen("name", 1000, MemoryMappedFileAccess.ReadWrite);
+            MemoryMappedFile MemoryMapped = MemoryMappedFile.OpenExisting("name", MemoryMappedFileRights.FullControl);
             using (MemoryMappedViewAccessor FileMap = MemoryMapped.CreateViewAccessor())
             {
                 PKMDS.Pokemon otherpkm = new PKMDS.Pokemon();
-                for (int i = 0; i < Marshal.SizeOf(otherpkm); i++)
+                FileMap.ReadArray<byte>(0, otherpkm.Data, 0, 136);
+                if (otherpkm.SpeciesID == 0)
                 {
-                    FileMap.Read<byte>(i, out otherpkm.Data[i]);
+                    FileMap.Dispose();
+                    return;
                 }
+                UInt16 otherpkmcheck = BitConverter.ToUInt16(otherpkm.Data, 0x06);
                 if (pb.Name == pbSprite.Name)
                 {
+                    UInt16 frmpkmcheck = BitConverter.ToUInt16(frmpkm.Data, 0x06);
+                    if (frmpkmcheck == otherpkmcheck)
+                    {
+                        FileMap.Dispose();
+                        return;
+                    }
                     frmpkm.Data = otherpkm.Data;
                 }
                 else
                 {
+                    UInt16 frmpkmcheck = BitConverter.ToUInt16(frmpkm2.Data, 0x06);
+
+                    if (frmpkmcheck == otherpkmcheck)
+                    {
+                        FileMap.Dispose();
+                        return;
+                    }
                     frmpkm2.Data = otherpkm.Data;
                 }
                 lblData.Text = frmpkm.SpeciesName;
@@ -98,24 +115,32 @@ namespace MemMapTestA
                 MemoryMappedFile MemoryMapped = MemoryMappedFile.CreateOrOpen("name", 1000, MemoryMappedFileAccess.ReadWrite);
                 using (MemoryMappedViewAccessor FileMap = MemoryMapped.CreateViewAccessor())
                 {
-                    for (int i = 0; i < Marshal.SizeOf(frmpkm); i++)
+                    if (pb.Name == pbSprite.Name)
                     {
-                        if (pb.Name == pbSprite.Name)
-                        {
-                            FileMap.Write<byte>(i, ref frmpkm.Data[i]);
-                        }
-                        else
-                        {
-                            FileMap.Write<byte>(i, ref frmpkm2.Data[i]);
-                        }
+                        FileMap.WriteArray<byte>(0, frmpkm.Data, 0, 136);
+                    }
+                    else
+                    {
+                        FileMap.WriteArray<byte>(0, frmpkm2.Data, 0, 136);
                     }
                 }
+                UInt16 otherpkmcheck = BitConverter.ToUInt16(otherpkm.Data, 0x06);
                 if (pb.Name == pbSprite.Name)
                 {
+                    UInt16 frmpkmcheck = BitConverter.ToUInt16(frmpkm.Data, 0x06);
+                    if (frmpkmcheck == otherpkmcheck)
+                    {
+                        return;
+                    }
                     frmpkm.Data = otherpkm.Data;
                 }
                 else
                 {
+                    UInt16 frmpkmcheck = BitConverter.ToUInt16(frmpkm2.Data, 0x06);
+                    if (frmpkmcheck == otherpkmcheck)
+                    {
+                        return;
+                    }
                     frmpkm2.Data = otherpkm.Data;
                 }
                 lblData.Text = frmpkm.SpeciesName;

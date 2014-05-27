@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="PKMDS_CS">
-      <HintPath>..\..\PKMDS-Save-Editor\externals\PKMDS-Win32-DLL\PKMDS-Win32-DLL\PKMDS_CS\bin\Release\PKMDS_CS.dll</HintPath>
+      <HintPath>.\PKMDS_CS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -69,6 +69,18 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <None Include="..\Dragonite.pkm">
+      <Link>Dragonite.pkm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Feraligatr.pkm">
+      <Link>Feraligatr.pkm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Genesect.pkm">
+      <Link>Genesect.pkm</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
